@@ -33,7 +33,7 @@ public class FXMLController {
     private Button btnSelezionaAnno;
 
     @FXML
-    private ComboBox<?> cmbBoxForma;
+    private ComboBox<String> cmbBoxForma;
 
     @FXML
     private Button btnCreaGrafo;
@@ -49,17 +49,78 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	txtResult.clear();
+    	if(cmbBoxForma.getValue()==null) {
+    		txtResult.appendText("Seleziona una forma nella tendina\n\n");
+    		return;
+    	}
+    	int n;
+    	try {
+    		n = Integer.parseInt(txtAnno.getText());
+    	}catch(NumberFormatException ex) {
+    		txtResult.appendText("Errore, Inserisci un anno compreso tra il 1910 e il 2014, estremi compresi!!\n");
+    		cmbBoxForma.getItems().clear();
+    		return;
+    	}
+    	if(n<1910 || n>2014) {
+    		txtResult.appendText("Errore, Inserisci un anno compreso tra il 1910 e il 2014, estremi compresi!!\n");
+    		cmbBoxForma.getItems().clear();
+    		return;
+    	}
+    	String msg = model.doCreaGrafo(n, cmbBoxForma.getValue());
+    	txtResult.appendText(msg);
     }
 
     @FXML
     void doSelezionaAnno(ActionEvent event) {
-
+    	int n;
+    	try {
+    		n = Integer.parseInt(txtAnno.getText());
+    	}catch(NumberFormatException ex) {
+    		txtResult.appendText("Errore, Inserisci un anno compreso tra il 1910 e il 2014, estremi compresi!!\n");
+    		cmbBoxForma.getItems().clear();
+    		return;
+    	}
+    	if(n<1910 || n>2014) {
+    		txtResult.appendText("Errore, Inserisci un anno compreso tra il 1910 e il 2014, estremi compresi!!\n");
+    		cmbBoxForma.getItems().clear();
+    		return;
+    	}
+    	cmbBoxForma.getItems().clear();
+    	cmbBoxForma.getItems().addAll(model.doSelezionaAnno(n));
+    	
+    	
     }
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	int anno;
+    	try {
+    		anno = Integer.parseInt(txtAnno.getText());
+    	}catch(NumberFormatException ex) {
+    		txtResult.appendText("Errore, Inserisci un numero di minuti adatto\n");
+    		return;
+    	}
+    	int t1;
+    	try {
+    		t1 = Integer.parseInt(txtT1.getText());
+    	}catch(NumberFormatException ex) {
+    		txtResult.appendText("Errore, Inserisci un numero di minuti adatto\n");
+    		return;
+    	}
+    	if(cmbBoxForma.getValue()==null) {
+    		txtResult.appendText("Seleziona una forma nella tendina\n\n");
+    		return;
+    	}
+    	int alfa;
+    	try {
+    		alfa = Integer.parseInt(txtAlfa.getText());
+    	}catch(NumberFormatException ex) {
+    		txtResult.appendText("Errore, Inserisci un numero di minuti adatto\n");
+    		return;
+    	}
+    	String msg = model.doSimulator(t1, alfa, anno, cmbBoxForma.getValue());
+    	txtResult.appendText(msg);
     }
 
     @FXML
